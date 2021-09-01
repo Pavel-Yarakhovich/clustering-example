@@ -7,6 +7,8 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Dot,
+  LabelList,
 } from "recharts";
 
 const getRandomCoord = (range) => {
@@ -23,6 +25,7 @@ const convertToCoordObject = (array, weight = 3) => {
       x: point[0],
       y: point[1],
       z: weight,
+      clustOf: point[2] ?? 0,
     };
   });
 };
@@ -53,7 +56,7 @@ export const ClusteringExample = () => {
 
       const avgX = avgCoord(cluster, 0);
       const avgY = avgCoord(cluster, 1);
-      clusteredPoints.push([avgX, avgY]);
+      clusteredPoints.push([avgX, avgY, cluster.length]);
     });
 
     // replace clustered points with new points
@@ -91,7 +94,14 @@ export const ClusteringExample = () => {
           <XAxis type="number" dataKey="x" name="x" unit="px" />
           <YAxis type="number" dataKey="y" name="y" unit="px" />
           <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-          <Scatter name="Clustered" data={clustData} fill="#12ffaa" />
+          <Scatter
+            name="Clustered"
+            data={clustData}
+            fill="#12ffaa"
+            shape={<Dot r={5 + neighborhoodRadius} />}
+          >
+            <LabelList dataKey="clustOf" />
+          </Scatter>
           <Scatter data={filteredData} fill="#8884d8" />
         </ScatterChart>
         <ScatterChart
