@@ -43,3 +43,11 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.router-link {
+  color: white;
+  padding: 12px;
+  border: 1px solid white;
+  margin: 5px;
+  width: 120px;
+}
