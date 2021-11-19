@@ -1,0 +1,12 @@
+{
+    "active": "active-fr",
+    "flat": {
+        "room": {
+            "kitchen": "kitchen-fr",
+            "bedroom": {
+                "parents": "master bedroom-fr",
+                "children": "children bedroom-fr"
+            }
+        }
+    }
+}

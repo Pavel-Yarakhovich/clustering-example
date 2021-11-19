@@ -1,0 +1,31 @@
+.browse-file {
+  border: none;
+  width: 90px;
+  padding: 5px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.csv-file-name {
+  border: 1px solid white;
+  line-height: 2.5;
+  margin-top: 5;
+  margin-bottom: 5;
+  padding-left: 13;
+  padding-top: 3;
+  width: 250px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.table-row {
+  display: flex;
+  width: 100%;
+}
+
+.cell {
+  padding: 4px;
+  border: 1px solid white;
+  color: gainsboro;
+  word-break: break-all;
+}
