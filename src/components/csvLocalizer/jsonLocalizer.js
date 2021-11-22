@@ -23,6 +23,7 @@ const JsonLocalizer = () => {
   const [data, setData] = React.useState({});
   const [chosenFiles, setChosenFiles] = React.useState([en, de, fr, nl]);
   const [shownInput, setShownInput] = React.useState('');
+  const [newTranslation, setNewtranslation] = React.useState('');
 
   const inputRef = React.useRef();
 
@@ -48,7 +49,12 @@ const JsonLocalizer = () => {
 
   const onCancel = React.useCallback(() => {
     setShownInput('');
+    setNewtranslation('');
   }, []);
+
+  const saveTranslation = React.useCallback(() => {
+    console.log(`id: ${shownInput}`, `translation: ${newTranslation}`);
+  });
 
   return (
     <>
@@ -93,9 +99,13 @@ const JsonLocalizer = () => {
                         placeholder='Enter a new translation'
                         ref={inputRef}
                         id={`input-${shownInput}`}
+                        value={newTranslation}
+                        onChange={(e) => setNewtranslation(e.target.value)}
                       />
                       <div className='buttons-container'>
-                        <button className='save'>Save</button>
+                        <button className='save' onClick={saveTranslation}>
+                          Save
+                        </button>
                         <button className='cancel' onClick={onCancel}>
                           Cancel
                         </button>
