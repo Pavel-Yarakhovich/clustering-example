@@ -54,6 +54,8 @@ const JsonLocalizer = () => {
 
   const saveTranslation = React.useCallback(() => {
     console.log(`id: ${shownInput}`, `translation: ${newTranslation}`);
+    setShownInput('');
+    setNewtranslation('');
   });
 
   return (
@@ -98,7 +100,6 @@ const JsonLocalizer = () => {
                       <input
                         placeholder='Enter a new translation'
                         ref={inputRef}
-                        id={`input-${shownInput}`}
                         value={newTranslation}
                         onChange={(e) => setNewtranslation(e.target.value)}
                       />

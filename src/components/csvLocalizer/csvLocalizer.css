@@ -47,7 +47,7 @@
   width: 70%;
   outline: none;
   border: none;
-  animation: margin 0.3s ease-in-out;
+  animation: margin 0.2s ease-in-out;
 }
 
 @keyframes margin {
