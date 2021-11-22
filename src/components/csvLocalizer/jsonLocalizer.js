@@ -95,7 +95,7 @@ const JsonLocalizer = () => {
                       />
                     ))}
                   </div>
-                  {shownInput && shownInput.split('-')[0] === key && (
+                  {shownInput?.split('-')[0] === key && (
                     <div className='edit-translation'>
                       <input
                         placeholder='Enter a new translation'
