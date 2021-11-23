@@ -22,14 +22,14 @@ import './csvLocalizer.css';
 const JsonLocalizer = () => {
   const [data, setData] = React.useState({});
   const [chosenFiles, setChosenFiles] = React.useState([en, de, fr, nl]);
-  const [shownInput, setShownInput] = React.useState('');
+  const [activeCellId, setActiveCellId] = React.useState('');
   const [newTranslation, setNewtranslation] = React.useState('');
 
   const inputRef = React.useRef();
 
   React.useEffect(() => {
     inputRef.current?.focus();
-  }, [shownInput]);
+  }, [activeCellId]);
 
   React.useEffect(() => {
     const data = combineTranslations(
@@ -43,18 +43,17 @@ const JsonLocalizer = () => {
   }, [data]);
 
   const cellOnClick = React.useCallback((id) => {
-    setShownInput(id);
-    inputRef?.current?.focus();
+    setActiveCellId(id);
   }, []);
 
   const onCancel = React.useCallback(() => {
-    setShownInput('');
+    setActiveCellId('');
     setNewtranslation('');
   }, []);
 
   const saveTranslation = React.useCallback(() => {
-    console.log(`id: ${shownInput}`, `translation: ${newTranslation}`);
-    setShownInput('');
+    console.log(`id: ${activeCellId}`, `translation: ${newTranslation}`);
+    setActiveCellId('');
     setNewtranslation('');
   });
 
@@ -81,21 +80,21 @@ const JsonLocalizer = () => {
                     {/* <div className="cell" style={{ width: `${cellWidth}%` }}>
                     {key}
                   </div> */}
-                    {values.map((v, i) => (
-                      <Cell
-                        key={`${key}-${i}`}
-                        id={`${key}-${i}`}
-                        style={{ width: `${cellWidth}%` }}
-                        value={v}
-                        onClick={(id) => cellOnClick(id)}
-                        shownInput={shownInput}
-                        className={
-                          shownInput === `${key}-${i}` ? 'active-cell' : ''
-                        }
-                      />
-                    ))}
+                    {values.map((v, i) => {
+                      const id = `${key}-${i}`;
+                      return (
+                        <Cell
+                          key={id}
+                          id={id}
+                          style={{ width: `${cellWidth}%` }}
+                          value={v}
+                          onClick={(id) => cellOnClick(id)}
+                          className={activeCellId === id ? 'active-cell' : ''}
+                        />
+                      );
+                    })}
                   </div>
-                  {shownInput?.split('-')[0] === key && (
+                  {activeCellId?.split('-')[0] === key && (
                     <div className='edit-translation'>
                       <input
                         placeholder='Enter a new translation'
