@@ -55,9 +55,6 @@
 }
 
 .edit-translation .textarea {
-  cursor: end;
-  max-height: 100%;
-  min-height: min-content;
   text-align: left;
   font-size: 1.2rem;
   width: 70%;
