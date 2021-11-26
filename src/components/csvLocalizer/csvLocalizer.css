@@ -93,6 +93,14 @@
   color: white;
 }
 
+.alert {
+  margin: 0;
+  padding: 0;
+  color: red;
+  border: 1px solid white;
+  background-color: rgb(228, 224, 224);
+}
+
 @keyframes margin {
   from {
     margin-top: -30px;

@@ -23,6 +23,7 @@ const JsonLocalizer = () => {
   const [data, setData] = React.useState({});
   const [chosenFiles, setChosenFiles] = React.useState([en, de, fr, nl]);
   const [activeCellId, setActiveCellId] = React.useState('');
+  const [alert, setAlert] = React.useState('');
 
   const textareaRef = React.useRef();
 
@@ -49,7 +50,15 @@ const JsonLocalizer = () => {
     setActiveCellId('');
   }, []);
 
+  const activeCellContent =
+    activeCellId &&
+    data[activeCellId.split('-')[0]][+activeCellId.split('-')[1]];
+
   const saveTranslation = React.useCallback(() => {
+    if (activeCellContent === textareaRef.current.innerText) {
+      setAlert('Please, edit a translation or cancel');
+      return;
+    }
     const [key, index] = activeCellId.split('-');
     const updatedTranslation = data[key].map((val, idx) => {
       if (idx === +index) {
@@ -82,9 +91,7 @@ const JsonLocalizer = () => {
             .filter(Boolean)
             .map(([key, values]) => {
               const cellWidth = 100 / values.length;
-              const activeCellContent =
-                activeCellId &&
-                data[activeCellId.split('-')[0]][+activeCellId.split('-')[1]];
+              const showTextArea = activeCellId?.split('-')[0] === key;
               return (
                 <>
                   <div className='table-row' key={key}>
@@ -105,12 +112,13 @@ const JsonLocalizer = () => {
                       );
                     })}
                   </div>
-                  {activeCellId?.split('-')[0] === key && (
+                  {showTextArea && (
                     <div className='edit-translation'>
                       <div
                         contentEditable={true}
                         className='textarea'
                         ref={textareaRef}
+                        onFocus={() => setAlert('')}
                       >
                         {activeCellContent}
                       </div>
@@ -124,6 +132,7 @@ const JsonLocalizer = () => {
                       </div>
                     </div>
                   )}
+                  {alert && showTextArea && <p className='alert'>{alert}</p>}
                 </>
               );
             })}
