@@ -23,12 +23,11 @@ const JsonLocalizer = () => {
   const [data, setData] = React.useState({});
   const [chosenFiles, setChosenFiles] = React.useState([en, de, fr, nl]);
   const [activeCellId, setActiveCellId] = React.useState('');
-  const [newTranslation, setNewtranslation] = React.useState('');
 
-  const inputRef = React.useRef();
+  const textareaRef = React.useRef();
 
   React.useEffect(() => {
-    inputRef.current?.focus();
+    textareaRef.current?.focus();
   }, [activeCellId]);
 
   React.useEffect(() => {
@@ -48,14 +47,23 @@ const JsonLocalizer = () => {
 
   const onCancel = React.useCallback(() => {
     setActiveCellId('');
-    setNewtranslation('');
   }, []);
 
   const saveTranslation = React.useCallback(() => {
-    console.log(`id: ${activeCellId}`, `translation: ${newTranslation}`);
+    const [key, index] = activeCellId.split('-');
+    const updatedTranslation = data[key].map((val, idx) => {
+      if (idx === +index) {
+        return textareaRef.current.innerText;
+      } else {
+        return val;
+      }
+    });
+    setData({
+      ...data,
+      [key]: updatedTranslation,
+    });
     setActiveCellId('');
-    setNewtranslation('');
-  });
+  }, [activeCellId]);
 
   return (
     <>
@@ -74,6 +82,9 @@ const JsonLocalizer = () => {
             .filter(Boolean)
             .map(([key, values]) => {
               const cellWidth = 100 / values.length;
+              const activeCellContent =
+                activeCellId &&
+                data[activeCellId.split('-')[0]][+activeCellId.split('-')[1]];
               return (
                 <>
                   <div className='table-row' key={key}>
@@ -96,12 +107,13 @@ const JsonLocalizer = () => {
                   </div>
                   {activeCellId?.split('-')[0] === key && (
                     <div className='edit-translation'>
-                      <input
-                        placeholder='Enter a new translation'
-                        ref={inputRef}
-                        value={newTranslation}
-                        onChange={(e) => setNewtranslation(e.target.value)}
-                      />
+                      <div
+                        contentEditable={true}
+                        className='textarea'
+                        ref={textareaRef}
+                      >
+                        {activeCellContent}
+                      </div>
                       <div className='buttons-container'>
                         <button className='save' onClick={saveTranslation}>
                           Save
