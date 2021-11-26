@@ -48,6 +48,7 @@ const JsonLocalizer = () => {
 
   const onCancel = React.useCallback(() => {
     setActiveCellId('');
+    setAlert('');
   }, []);
 
   const activeCellContent =
