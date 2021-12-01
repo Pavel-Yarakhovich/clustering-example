@@ -51,26 +51,27 @@ const JsonLocalizer = () => {
     setAlert('');
   }, []);
 
-  const activeCellContent =
-    activeCellId &&
-    data[activeCellId.split('-')[0]][+activeCellId.split('-')[1]];
+  let activeCellContent;
+  const [activeKey, activeIndex] = activeCellId.split('-');
+  if (activeKey && activeIndex)
+    activeCellContent = data[activeKey][+activeIndex];
 
   const saveTranslation = React.useCallback(() => {
-    if (activeCellContent === textareaRef.current.innerText) {
+    const textareaContent = textareaRef.current.innerText;
+    if (activeCellContent === textareaContent) {
       setAlert('Please, edit a translation or cancel');
       return;
     }
-    const [key, index] = activeCellId.split('-');
-    const updatedTranslation = data[key].map((val, idx) => {
-      if (idx === +index) {
-        return textareaRef.current.innerText;
+    const updatedTranslation = data[activeKey].map((val, idx) => {
+      if (idx === +activeIndex) {
+        return textareaContent;
       } else {
         return val;
       }
     });
     setData({
       ...data,
-      [key]: updatedTranslation,
+      [activeKey]: updatedTranslation,
     });
     setActiveCellId('');
   }, [activeCellId]);

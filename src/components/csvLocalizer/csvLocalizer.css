@@ -51,7 +51,7 @@
   background-color: white;
   width: 100%;
   padding: 3px 60px 3px 20px;
-  animation: margin 0.3s ease-in-out;
+  animation: margin 0.25s ease-in-out;
 }
 
 .edit-translation .textarea {
