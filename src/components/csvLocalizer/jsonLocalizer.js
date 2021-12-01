@@ -93,7 +93,7 @@ const JsonLocalizer = () => {
             .filter(Boolean)
             .map(([key, values]) => {
               const cellWidth = 100 / values.length;
-              const showTextArea = activeCellId?.split('-')[0] === key;
+              const showTextArea = activeKey === key;
               return (
                 <>
                   <div className='table-row' key={key}>
