@@ -1,20 +1,24 @@
-import React, { useCallback } from "react";
-import { useDropzone } from "react-dropzone";
+import React, { useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
 
-import styles from "./dropzone.module.css";
+import styles from './dropzone.module.css';
+
+const uniqueFiles = new Map();
 
 const Dropzone = ({ files, setFiles }) => {
   const onDrop = useCallback(
     (acceptedFiles) => {
-      setFiles((prev) => [...prev, ...acceptedFiles]);
+      acceptedFiles.forEach((file) => uniqueFiles.set(file.name, file));
+      setFiles([...uniqueFiles.values()]);
     },
     [setFiles]
   );
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: ".json",
-  });
+  const { fileRejections, getRootProps, getInputProps, isDragActive } =
+    useDropzone({
+      onDrop,
+      accept: '.json',
+    });
 
   return (
     <>
@@ -23,7 +27,10 @@ const Dropzone = ({ files, setFiles }) => {
         {isDragActive ? (
           <p>Drop the files here ...</p>
         ) : (
-          <p>Drag 'n' drop some files here, or click to select files</p>
+          <p>Drag 'n' drop some files here, or click to select files.</p>
+        )}
+        {fileRejections[0] && (
+          <p className={styles.extension_alert}>Only json files accepted.</p>
         )}
       </div>
       <div className={styles.files_container}>
