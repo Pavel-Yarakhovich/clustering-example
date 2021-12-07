@@ -20,10 +20,10 @@ const JsonLocalizer = () => {
   const [uploadedFiles, setUploadedFiles] = React.useState([]);
   const [data, setData] = React.useState({});
   const [chosenFiles, setChosenFiles] = React.useState([]);
-  const [activeCellId, setActiveCellId] = React.useState("");
-  const [newTranslation, setNewtranslation] = React.useState("");
+  const [activeCellId, setActiveCellId] = React.useState('');
+  const [alert, setAlert] = React.useState('');
 
-  const inputRef = React.useRef();
+  const textareaRef = React.useRef();
 
   const unpackUploadedFiles = React.useCallback(() => {
     uploadedFiles.forEach((file) => {
@@ -36,7 +36,7 @@ const JsonLocalizer = () => {
   }, [uploadedFiles]);
 
   React.useEffect(() => {
-    inputRef.current?.focus();
+    textareaRef.current?.focus();
   }, [activeCellId]);
 
   React.useEffect(() => {
@@ -55,15 +55,34 @@ const JsonLocalizer = () => {
   }, []);
 
   const onCancel = React.useCallback(() => {
-    setActiveCellId("");
-    setNewtranslation("");
+    setActiveCellId('');
+    setAlert('');
   }, []);
 
+  let activeCellContent;
+  const [activeKey, activeIndex] = activeCellId.split('-');
+  if (activeKey && activeIndex)
+    activeCellContent = data[activeKey][+activeIndex];
+
   const saveTranslation = React.useCallback(() => {
-    console.log(`id: ${activeCellId}`, `translation: ${newTranslation}`);
-    setActiveCellId("");
-    setNewtranslation("");
-  }, []);
+    const textareaContent = textareaRef.current.innerText;
+    if (activeCellContent === textareaContent) {
+      setAlert('Please, edit a translation or cancel');
+      return;
+    }
+    const updatedTranslation = data[activeKey].map((val, idx) => {
+      if (idx === +activeIndex) {
+        return textareaContent;
+      } else {
+        return val;
+      }
+    });
+    setData({
+      ...data,
+      [activeKey]: updatedTranslation,
+    });
+    setActiveCellId('');
+  }, [activeCellId]);
 
   return (
     <>
@@ -86,6 +105,7 @@ const JsonLocalizer = () => {
             .filter(Boolean)
             .map(([key, values]) => {
               const cellWidth = 100 / values.length;
+              const showTextArea = activeKey === key;
               return (
                 <>
                   <div className="table-row" key={key}>
@@ -106,16 +126,18 @@ const JsonLocalizer = () => {
                       );
                     })}
                   </div>
-                  {activeCellId?.split("-")[0] === key && (
-                    <div className="edit-translation">
-                      <input
-                        placeholder="Enter a new translation"
-                        ref={inputRef}
-                        value={newTranslation}
-                        onChange={(e) => setNewtranslation(e.target.value)}
-                      />
-                      <div className="buttons-container">
-                        <button className="save" onClick={saveTranslation}>
+                  {showTextArea && (
+                    <div className='edit-translation'>
+                      <div
+                        contentEditable={true}
+                        className='textarea'
+                        ref={textareaRef}
+                        onFocus={() => setAlert('')}
+                      >
+                        {activeCellContent}
+                      </div>
+                      <div className='buttons-container'>
+                        <button className='save' onClick={saveTranslation}>
                           Save
                         </button>
                         <button className="cancel" onClick={onCancel}>
@@ -124,6 +146,7 @@ const JsonLocalizer = () => {
                       </div>
                     </div>
                   )}
+                  {alert && showTextArea && <p className='alert'>{alert}</p>}
                 </>
               );
             })}

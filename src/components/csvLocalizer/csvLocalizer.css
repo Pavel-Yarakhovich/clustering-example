@@ -51,22 +51,15 @@
   background-color: white;
   width: 100%;
   padding: 3px 60px 3px 20px;
+  animation: margin 0.25s ease-in-out;
 }
-.edit-translation input {
+
+.edit-translation .textarea {
+  text-align: left;
   font-size: 1.2rem;
   width: 70%;
   outline: none;
   border: none;
-  animation: margin 0.2s ease-in-out;
-}
-
-@keyframes margin {
-  from {
-    margin-top: -30px;
-  }
-  to {
-    margin-top: 0;
-  }
 }
 
 .edit-translation .buttons-container {
@@ -98,4 +91,21 @@
 .buttons-container .cancel:hover {
   background: linear-gradient(to right bottom, #dfdcdc, rgb(114, 32, 245));
   color: white;
+}
+
+.alert {
+  margin: 0;
+  padding: 0;
+  color: red;
+  border: 1px solid white;
+  background-color: rgb(228, 224, 224);
+}
+
+@keyframes margin {
+  from {
+    margin-top: -30px;
+  }
+  to {
+    margin-top: 0;
+  }
 }
