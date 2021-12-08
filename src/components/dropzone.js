@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import CloseButton from '../UI/CloseButton/CloseButton';
 
 import styles from './dropzone.module.css';
 
@@ -20,6 +21,10 @@ const Dropzone = ({ files, setFiles }) => {
       accept: '.json',
     });
 
+  const removeFile = React.useCallback((fileName) => {
+    setFiles((prev) => prev.filter((f) => f.name !== fileName));
+  }, []);
+
   return (
     <>
       <div {...getRootProps()} className={styles.dropzone}>
@@ -35,11 +40,17 @@ const Dropzone = ({ files, setFiles }) => {
       </div>
       <div className={styles.files_container}>
         {files.length > 0 &&
-          files.map((file) => (
-            <div className={styles.uploaded_file} key={file.name}>
-              {file.name}
-            </div>
-          ))}
+          files.map((file) => {
+            const fileName = file.name;
+            return (
+              <>
+                <div className={styles.uploaded_file} key={fileName}>
+                  <div>{fileName}</div>
+                  <CloseButton onClick={() => removeFile(fileName)} />
+                </div>
+              </>
+            );
+          })}
       </div>
     </>
   );
